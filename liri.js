@@ -15,17 +15,17 @@ inquirer.prompt(
         type: "list",
         name: "questions",
         message: "What do you want to do?",
-        choices: ["Movie", "Tweets", "Songs"]
+        choices: ["Get Movie Info", "Look at Tweets", "Spotify a Song"]
 
         // run different function depending on choice
     }).then(function (response) {
         console.log(response.questions)
-        if (response.questions === "Movie") {
+        if (response.questions === "Get Movie Info") {
             runMovie()
         }
-        else if (response.questions === "Tweets") {
+        else if (response.questions === "Look at Tweets") {
             runTweets()
-        } else if (response.questions === "Songs") {
+        } else if (response.questions === "Spotify a Song") {
             runSpotify()
         }
 
@@ -112,10 +112,11 @@ function runSpotify() {
                 //    parse data from spotify object
                 var currSong = data.tracks.items[0];
                 // console.log(currSong);
+                console.log(currSong.name);
                 console.log(currSong.artists[0].name);
                 console.log(currSong.album.name);
-                console.log(currSong.album.external_urls.spotify)
-                console.log(currSong.name)
+                console.log(currSong.album.external_urls.spotify);
+                
             });
         });
 }
@@ -146,8 +147,9 @@ function runTweets() {
                     if (!error) {
                         // console.log(tweets);
                         for (i = 0; i < tweets.length; i++) {
-                            console.log(tweets[i].created_at)
-                            console.log(tweets[i].text)
+                            console.log(tweets[i].created_at);
+                            console.log(tweets[i].text);
+                            // function restart();
                         }
 
                     }
@@ -155,7 +157,29 @@ function runTweets() {
             }
         })
 }
-
+        // Wanted to incorporate a restart, but couldn't figure it out
+    //    function restart(){ 
+    // inquirer.prompt(
+    //     {
+    //         type: "list",
+    //         name: "questions",
+    //         message: "What do you want to do?",
+    //         choices: ["Get Movie Info", "Look at Tweets", "Spotify a Song"]
+    
+    //         // run different function depending on choice
+    //     }).then(function (response) {
+    //         console.log(response.questions)
+    //         if (response.questions === "Get Movie Info") {
+    //             runMovie()
+    //         }
+    //         else if (response.questions === "Look at Tweets") {
+    //             runTweets()
+    //         } else if (response.questions === "Spotify a Song") {
+    //             runSpotify()
+    //         }
+    
+    //     })
+    // }
 
 
 
