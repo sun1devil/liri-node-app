@@ -9,14 +9,15 @@ var keys = require("./keys.js")
 var spotify = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
 
-// // * `movie-this`
-
+//What does the user want to do
 inquirer.prompt(
     {
         type: "list",
         name: "questions",
         message: "What do you want to do?",
         choices: ["Movie", "Tweets", "Songs"]
+
+        // run different function depending on choice
     }).then(function (response) {
         console.log(response.questions)
         if (response.questions === "Movie") {
@@ -33,6 +34,7 @@ inquirer.prompt(
 // Run Movie function
 function runMovie() {
     // prompt for favorite
+
     inquirer.prompt(
         {
             type: "input",
@@ -42,7 +44,7 @@ function runMovie() {
             // Capture response from name
         }).then(function (response) {
 
-                // Store in Variable
+            // Store in Variable
             var movieName = (response.usermovie);
             // cant get this to work properly!!!
             // if(response.username = " "){
@@ -73,6 +75,15 @@ function runMovie() {
 }
 
 // // // * `spotify-this-song`
+// I know the below should be the input type, but not clear how to insert it.
+fs.readFile("random.text", "utf8", function (error, data) {
+    if (error) {
+        console.log(error)
+    }
+    // console.log(data);
+    var songText = (data);
+    // console.log(songText);
+});
 
 function runSpotify() {
 
@@ -122,13 +133,15 @@ function runTweets() {
 
 
         }).then(function (choice) {
+            if (!choice.tweetchoice){
+                console.log("I'm offended! Go Away!");
+            }
             if (choice.tweetchoice) {
                 console.log("OK, I'll show you them");
                 // pass my twitter handle into the argument
                 var params = {
                     screen_name: 'codejmc11'
                 };
-
                 client.get('statuses/user_timeline', params, function (error, tweets, response) {
                     if (!error) {
                         // console.log(tweets);
