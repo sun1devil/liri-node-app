@@ -46,10 +46,11 @@ function runMovie() {
 
             // Store in Variable
             var movieName = (response.usermovie);
-            // cant get this to work properly!!!
-            // if(response.username = " "){
-            //     movieName = "Mr Nobody"
-            // }
+           
+            console.log(movieName)
+            if(!response.usermovie) {
+                movieName = "Mr Nobody"
+            }
 
             var omdbQueryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
             // console.log(omdbQueryUrl);
@@ -100,10 +101,10 @@ function runSpotify() {
             var songName = (song.usersong);
 
             // Cant get this to work properly!!!
-            // if(song.usersong === " "){
-            //     songName = "The Sign"
-            // }
-            // console.log(songName);
+            if(!song.usersong){
+                songName = "The Sign"
+            }
+            console.log(songName);
             spotify.search({ type: 'track', query: songName }, function (err, data) {
                 if (err) {
                     return console.log('Error occurred: ' + err);
