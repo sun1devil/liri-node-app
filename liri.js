@@ -9,27 +9,6 @@ var keys = require("./keys.js")
 var spotify = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
 
-
-// {
-//         type: "confirm",
-//         message: "Want to see my tweets",
-//         name: "usermovie",
-//         default: false
-//     },
-
-//     //     {
-//     //         type: "confirm",
-//     //         message: "Do what it says",
-//     //         name: "usermovie",
-//     //         default: false
-//     //     // }]).then
-
-
-
-
-
-
-
 // // * `movie-this`
 
 inquirer.prompt(
@@ -37,142 +16,131 @@ inquirer.prompt(
         type: "list",
         name: "questions",
         message: "What do you want to do?",
-        choices: [ "Movie", "Tweets", "Songs"]
-    }).then (function (response){
+        choices: ["Movie", "Tweets", "Songs"]
+    }).then(function (response) {
         console.log(response.questions)
-        if(response.questions === "Movie"){
+        if (response.questions === "Movie") {
             runMovie()
         }
-        else if (response.questions === "Tweets"){
+        else if (response.questions === "Tweets") {
             runTweets()
-        }else if (response.questions === "Songs"){
+        } else if (response.questions === "Songs") {
             runSpotify()
         }
-        
-    }) 
 
+    })
 
-function runMovie (){
+// Run Movie function
+function runMovie() {
+    // prompt for favorite
+    inquirer.prompt(
+        {
+            type: "input",
+            name: "usermovie",
+            message: "What is your favorite movie?",
 
-inquirer.prompt(
-    {
-        type: "input",
-        name: "usermovie",
-        message: "What is your favorite movie?",
+            // Capture response from name
+        }).then(function (response) {
 
+                // Store in Variable
+            var movieName = (response.usermovie);
+            // cant get this to work properly!!!
+            // if(response.username = " "){
+            //     movieName = "Mr Nobody"
+            // }
 
-    }).then(function (response){
-        // console.log(response);
-        // console.log(response.usermovie);
-        // var movieArgs = response.usermovie;
-        var movieName = (response.usermovie);
-        console.log(movieName);
-        var omdbQueryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
-        console.log(omdbQueryUrl);
+            var omdbQueryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+            // console.log(omdbQueryUrl);
 
-        request(omdbQueryUrl, function(error, response, body) {
+            request(omdbQueryUrl, function (error, response, body) {
 
-//   // If the request is successful
-  if (!error && response.statusCode === 200) {
+                //   // If the request is successful
+                if (!error && response.statusCode === 200) {
 
-//     // Parse the body for data
-        console.log("Movie Title: " + JSON.parse(body).Title);
-    console.log("Release Year: " + JSON.parse(body).Year);
-    console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
-    console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
-    console.log("Produced In: " + JSON.parse(body).Country);
-    console.log("Language: " + JSON.parse(body).Language);
-    console.log("Plot: " + JSON.parse(body).Plot);
-    console.log("Actors: " + JSON.parse(body).Actors);
-                  } 
-                });
+                    //     // Parse the body for data
+                    console.log("Movie Title: " + JSON.parse(body).Title);
+                    console.log("Release Year: " + JSON.parse(body).Year);
+                    console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
+                    console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
+                    console.log("Produced In: " + JSON.parse(body).Country);
+                    console.log("Language: " + JSON.parse(body).Language);
+                    console.log("Plot: " + JSON.parse(body).Plot);
+                    console.log("Actors: " + JSON.parse(body).Actors);
+                }
             });
+        });
 
-        }
+}
 
 // // // * `spotify-this-song`
 
-function runSpotify () { 
+function runSpotify() {
 
 
 
-inquirer.prompt(
-    {
-        type: "input",
-        name: "usersong",
-        message: "What is your favorite song?",
+    inquirer.prompt(
+        {
+            type: "input",
+            name: "usersong",
+            message: "What is your favorite song?",
 
+            // grab user input from name
+        }).then(function (song) {
+            var songName = (song.usersong);
 
-    }).then(function (song) {
-        // console.log(song);
-        // console.log(song.usersong);
-        var songName = (song.usersong);
-        // console.log(songName);
-        spotify.search({ type: 'track', query: songName }, function (err, data) {
-            if (err) {
-                return console.log('Error occurred: ' + err);
-            }
+            // Cant get this to work properly!!!
+            // if(song.usersong === " "){
+            //     songName = "The Sign"
+            // }
+            // console.log(songName);
+            spotify.search({ type: 'track', query: songName }, function (err, data) {
+                if (err) {
+                    return console.log('Error occurred: ' + err);
+                }
 
-            // console.log(data);
-            var currSong = data.tracks.items[0];
-            // console.log(currSong);
-            console.log(currSong.artists[0].name);
-            console.log(currSong.album.name);
-            console.log(currSong.album.external_urls.spotify)
-            console.log(currSong.name)
+                //    parse data from spotify object
+                var currSong = data.tracks.items[0];
+                // console.log(currSong);
+                console.log(currSong.artists[0].name);
+                console.log(currSong.album.name);
+                console.log(currSong.album.external_urls.spotify)
+                console.log(currSong.name)
+            });
         });
-    });
 }
-
-
-//   // If the request is successful
-//   if (!error && response.statusCode === 200) {
-//     console.log(response);
-//     console.log(body);
-//     // Parse the body for data
-//     // console.log("Song Title: " + JSON.parse(body).Title);
-//     // console.log("Song Name: " + JSON.parse(body).Year);
-//     // console.log("Preview Link: " + JSON.parse(body).imdbRating);
-//     // console.log("Album: " + JSON.parse(body).Ratings[1].Value);
-
-//   }
-//   else{
-//       console.log(error);
-//   }
-// });
-
-
 
 // //  * `my-tweets`
 
 function runTweets() {
 
-inquirer.prompt(
-    {
-        type: "confirm",
-        message: "Want to see my tweets",
-        name: "tweetchoice",
-        default: false,
+    inquirer.prompt(
+        {
+            type: "confirm",
+            message: "Want to see my tweets",
+            name: "tweetchoice",
+            default: false,
 
 
-    }).then(function (choice) {
-        if (choice.tweetchoice) {
-            console.log("OK, I'll show you them");
+        }).then(function (choice) {
+            if (choice.tweetchoice) {
+                console.log("OK, I'll show you them");
+                // pass my twitter handle into the argument
+                var params = {
+                    screen_name: 'codejmc11'
+                };
 
-            var params = {screen_name: 'codejmc11'};
+                client.get('statuses/user_timeline', params, function (error, tweets, response) {
+                    if (!error) {
+                        // console.log(tweets);
+                        for (i = 0; i < tweets.length; i++) {
+                            console.log(tweets[i].created_at)
+                            console.log(tweets[i].text)
+                        }
 
-            client.get('statuses/user_timeline', params, function(error, tweets, response) {
-              if (!error) {
-                // console.log(tweets);
-                for (i =0; i < tweets.length; i++){
-                    console.log(tweets[i].created_at)
-                    console.log(tweets[i].text)
-                }
-
-              }
-                          });
-        }
-    })
+                    }
+                });
+            }
+        })
 }
 
 
@@ -181,35 +149,4 @@ inquirer.prompt(
 
 
 
-    //          request(twitterQueryUrl, function(error, response, body) {
 
-    //         // //    // If the request is successful
-    //            if (!error && response.statusCode === 200) {
-    //              console.log(JSON);
-    //         // // // // //      // Parse the body for data
-    //         // // // // //      console.log("TWEETS: " + JSON.parse(body).XXXX);
-    //     } else {
-    //         console.log("I'm offended, Go Away!")
-
-    //     };
-    // });
-
-
-
-
-
-
-
-
-
-// //  + twitterName + "ZIe5dVl8OHQJM5nq7p8kEJDzt"+ twitterName + "ZIe5dVl8OHQJM5nq7p8kEJDzt"
-//  
-// // // //      console.log("Song Name: " + JSON.parse(body).Year);
-// // // //      console.log("Preview Link: " + JSON.parse(body).imdbRating);
-// // // //      console.log("Album: " + JSON.parse(body).Ratings[1].Value);
-
-//    }
-//  });
-
-
-// * `do-what-it-says`
